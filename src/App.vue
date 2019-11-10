@@ -19,6 +19,7 @@
 				
 				<div class="content">
 					<div class="statContainer" style="margin-bottom: 2rem">Started At: <span class="stat">{{formatDate(card.started)}}</span></div>
+					<div class="statContainer" style="margin-bottom: 2rem" v-if="card.ended">Ended At: <span class="stat">{{formatDate(card.ended)}}</span></div>
 
 					Found:<br>
 					<div class="statContainer">Columns: <span class="stat" v-if="winstate.cols.length === 0">None</span><span class="stat" v-else>{{winstate.cols.join(", ")}}</span></div>
@@ -128,7 +129,7 @@ export default {
 			"A delay meme is posted",
 			"Michael false mutes",
 			"Someone mistakes helper for builder", // Good luck if you get this
-			"Someone left because their app got denied",
+			"Someone leaves because their app got denied",
 			"Someone discusses #programming in #general",
 			"Someone mentions hytale",
 			"Droei brags about his PC",
@@ -145,6 +146,7 @@ export default {
 			"Dennis complains about infrastructure",
 			"Pjinky sends a message",
 			"Dennis shows his Tekken rank",
+			"Someone rants about PHP while not in #programming",
 			
 			// Perotin
 			"Michael forgets he's a moderator",
@@ -168,7 +170,14 @@ export default {
 			// KingAlter
 			"Dennis complains about his Indian peers at work",
 			"Dennis starts talking about taking a shit",
-			"Choco posts pictures of Creed"
+			"Choco posts pictures of Creed",
+			"Dennis tells someone to put their meme on /r/Dyescape",
+			"Michael pings Aeris with \"uwu\"",
+			"Mini's nexus server goes down",
+
+			// Choco
+			"Dennis uses :kappa_angry~1: more than 3 times in a day",
+			
 		]
 	}},
 	methods: {
@@ -215,7 +224,8 @@ export default {
 
 			this.card = {
 				card: temp,
-				started: new Date()
+				started: new Date(),
+				ended: null
 			};
 
 			this.saveCard();
@@ -237,6 +247,9 @@ export default {
 			this.saveCard();
 
 			this.winstate = this.findWinStates();
+			if(this.winstate.fullCard) {
+				this.card.ended = new Date();
+			}
 		},
 		findWinStates() {
 			let final = {

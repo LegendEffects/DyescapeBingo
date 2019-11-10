@@ -63,6 +63,9 @@ export default {
 
 			width: 10rem;
 			height: 10rem;
+			min-width: 10rem;
+			min-height: 10rem;
+
 			padding: .4rem;
 
 			.phrase {

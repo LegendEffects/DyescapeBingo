@@ -1,21 +1,57 @@
 <template>
 	<div id="app" v-if="ready">
-		<div v-if="!card" class="centerAction">
+		<div v-if="!card" class="card center rounded">
 			<div class="title"><h1>Dyescape Bingo</h1></div>
 			
 			<div class="content">
 				<button @click="generateCard">Generate your card</button>
 			</div>
-
 		</div>
+		<div v-if="card !== null" style="display: flex; flex-direction: row; height: 100%;">
+			<div class="card ">
+				<div class="title"><h1>Dyescape Bingo</h1></div>
+				
+				<div class="content">
+					<div class="statContainer" style="margin-bottom: 2rem">Started At: <span class="stat">{{formatDate(card.started)}}</span></div>
 
-		<bingo-card v-if="card !== null" :card="card" />
+					Found:<br>
+					<div class="statContainer">Columns: <span class="stat" v-if="winstate.cols.length === 0">None</span><span class="stat" v-else>{{winstate.cols.join(", ")}}</span></div>
+					<div class="statContainer">Rows: <span class="stat" v-if="winstate.rows.length === 0">None</span><span class="stat" v-else>{{winstate.rows.join(", ")}}</span></div>
+					<div class="statContainer">Full Card: <span class="stat">{{winstate.fullCard}}</span></div>
+
+					<br><br>
+					<div><button @click="resetCard">Reset</button></div>
+				</div>
+			</div>
+
+			<bingo-card :card="card" />
+		</div>
 	</div>
 </template>
 
 <script>
 import BingoCard from './components/BingoCard'
 import Logger from './logging'
+
+function chunk(arr, len) {
+	let chunks = [],
+	i = 0,
+	n = arr.length;
+
+	while (i < n) {
+		chunks.push(arr.slice(i, i += len));
+	}
+
+	return chunks;
+}
+
+function checkRow(arr) {
+	for(const index in arr) {
+		const item = arr[index];
+		if(item.completed === false) return false;
+	}
+	return true;
+}
 
 export default {
 	name: 'app',
@@ -27,6 +63,11 @@ export default {
 		alert: null,
 
 		card: null,
+		winstate: {
+			rows: [],
+			cols: [],
+			fullCard: false
+		},
 
 
 		cardChoices: [
@@ -57,9 +98,39 @@ export default {
 			"Zirker rants about maths",
 			"Jay welcomes a user",
 			"Wiki Team gets called a non staff rank",
+
+			// V1
+			"Someone bullies Jay",
+			"Raiding a spigot thread",
+			"Someone shits on others code",
+			"The #lore channel is used",
+			"Some guy posts a gringery gif",
+			"Aekalix makes a fancy devlog",
+			"Euvrounin false mutes",
+			"A dutch person shits on Belgium for no reason",
+			"Droei posts lasagna",
+			"A delay meme is posted",
+			"Michael false mutes",
+			"Someone mistakes helper for builder",
+			"Someone left because their app got denied",
+			"Someone discusses #programming in #general",
+			"Someone mentions hytale",
+			"Droei brags about his PC",
+
+			// Other
+			"Droei wants to buy more tech",
+			"Michael attempts to stop Droei from buying more tech",
+			"MiniDigger gets drunk",
+			"Dennis uses ShareX",
+			"Dennis takes a picture of his monitor instead of screenshotting",
+			"Dennis spams :dutch_omega_lul: in one message"
 		]
 	}},
 	methods: {
+		formatDate(date) {
+			return date.toLocaleString();
+		},
+
 		generateCard() {
 			let used = [];
 			let temp = [];
@@ -102,6 +173,49 @@ export default {
 		},
 		saveCard() {
 			localStorage.setItem("dye-bingoCard", JSON.stringify(this.card));
+		},
+		resetCard() {
+			this.card = null;
+			localStorage.removeItem("dye-bingoCard");
+		},
+		completeAction(card) {
+			this.card.card[card.index].completed = new Date();
+			this.saveCard();
+
+			this.winstate = this.findWinStates();
+		},
+		findWinStates() {
+			let final = {
+				rows: [],
+				cols: [],
+				fullCard: false
+			};
+			let rows = chunk(this.card.card, 5);
+			
+			// Check all rows for a complete one
+			for(let i=0; i < rows.length; i++) {
+				let res = checkRow(rows[i]);
+				if(res) final.rows.push(i+1);
+			}
+
+			// Check all columns
+			// Just ingore this mess which checks each column and then turns them into rows to be checked
+			for(let c=0; c < rows.length; c++) {
+				let temp = [];
+				for(let i=0; i < rows.length; i++) {
+					temp.push(rows[i][c]);
+				}
+			
+				let res = checkRow(temp);
+				if(res) final.cols.push(c+1);
+			}
+
+			// Well if they've done all rows then it's a full card.
+			if(final.rows.length === 5) {
+				final.fullCard = true;
+			}
+
+			return final;
 		}
 	},
 	created() {
@@ -117,16 +231,17 @@ export default {
 		}
 
 		Logger.log("Events", `Registering...`, "success");
-		this.$root.$on("completeAction", (card) => {
-			this.card.card[card.index].completed = new Date();
-		});
+		this.$root.$on("completeAction", this.completeAction);
 		this.$root.$on("saveCard", this.saveCard);
 		Logger.log("Events", `Registered`, "success");
 
 		const card = localStorage.getItem('dye-bingoCard');
 		if(card) { // User has a previous card
 			this.card = JSON.parse(card);
+			this.card.started = new Date(this.card.started);
+			this.winstate = this.findWinStates();
 		}
+
 
 		this.ready = true;
 	}
@@ -154,22 +269,26 @@ body {
 	flex-direction: column;
 }
 
-.centerAction {
-	width: 300px;
+.card {
 	text-align: center;
-
-	margin: auto;
-	border-radius: 1rem;
-
 	background: rgba(0,0,0,0.5);
 
+	&.center {
+		width: 300px;
+		margin: auto;
+	}
+	&.rounded {
+		border-radius: 1rem;
+
+		.title {
+			border-top-left-radius: 1rem;
+			border-top-right-radius: 1rem;
+		}
+	}
+
 	.title {
-		border-top-left-radius: 1rem;
-		border-top-right-radius: 1rem;
-
 		background: rgba(255,255,255,0.05);
-
-		padding: 1rem 0;
+		padding: 1rem;
 
 		h1 {
 			margin: 0;
@@ -177,6 +296,18 @@ body {
 	}
 	.content {
 		padding: 2rem 1rem;
+	}
+}
+
+.statContainer {
+	display: flex;
+	flex-direction: row;
+
+	width: 100%;
+
+	.stat {
+		justify-content: flex-end;
+		margin-left: auto;
 	}
 }
 </style>

@@ -68,12 +68,14 @@ export default {
 		},
 		submitProof() {
 			if(this.popout.card.completed !== false) return;
+			if(this.popout.boxVal.length < 5) return;
+
 			this.popout.card.proof = this.popout.boxVal;
 
 			this.$root.$emit("completeAction", this.popout.card);
 
 			this.popout.style.display = "none";
-			this.popout.boxVal = null;
+			this.popout.boxVal = "";
 			this.popout.card = null;
 		}
 	}

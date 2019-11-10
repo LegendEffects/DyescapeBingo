@@ -1,23 +1,32 @@
 <template>
 	<div class="bingo-card">
-		<div class="titleSpan">
+		<div class="titleSpan" style="flex-direction: column; margin: 5rem 0; margin-right: 1rem">
 			<div @click="$root.$emit('esa', 6)">D</div>
 			<div>E</div>
 			<div @click="$root.$emit('esa', 7)">L</div>
 			<div>A</div>
 			<div @click="$root.$emit('esa', 8)">Y</div>
 		</div>
-		<div class="row" v-for="(row, index) of chunk(card.card, 5)" :key="index">
-			<div class="item" v-for="(item, itemIndex) of row" :key="itemIndex" @click="completeAction(item, $event)" :class="{completed: item.completed != false}">
-				<div class="phrase">
-					{{item.phrase}}
+		<div>
+			<div class="titleSpan">
+				<div @click="$root.$emit('esa', 9)">D</div>
+				<div>E</div>
+				<div>L</div>
+				<div>A</div>
+				<div>Y</div>
+			</div>
+			<div class="row" v-for="(row, index) of chunk(card.card, 5)" :key="index">
+				<div class="item" v-for="(item, itemIndex) of row" :key="itemIndex" @click="completeAction(item, $event)" :class="{completed: item.completed != false}">
+					<div class="phrase">
+						{{item.phrase}}
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="popout" :style="popout.style">
-			<input type="text" v-model="popout.boxVal">
-			<button @click="submitProof">Submit Proof</button>
+			<div class="popout" :style="popout.style">
+				<input type="text" v-model="popout.boxVal">
+				<button @click="submitProof">Submit Proof</button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -87,6 +96,9 @@ export default {
 	margin: auto;
 	overflow: auto;
 
+	display: flex;
+	flex-direction: row;
+
 	.row {
 		display: flex;
 		flex-direction: row;
@@ -94,6 +106,7 @@ export default {
 		justify-content: space-between;
 
 		border-top: 1px solid #cfcfcf;
+		
 		&:last-of-type {
 			border-bottom: 1px solid #cfcfcf;
 		}

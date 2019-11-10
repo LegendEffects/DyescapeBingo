@@ -1,5 +1,5 @@
 <template>
-	<div id="app" v-if="ready">
+	<div id="app" v-if="ready" :style="appStyle">
 		<div v-if="!card" class="card center rounded">
 			<div class="title"><h1>Dyescape Bingo</h1></div>
 			
@@ -9,7 +9,13 @@
 		</div>
 		<div v-if="card !== null" style="display: flex; flex-direction: row; height: 100%;">
 			<div class="card ">
-				<div class="title"><h1>Dyescape Bingo</h1></div>
+				<div class="title"><h1>Dyescape 
+					<span @click="easter(1)">B</span>
+					<span @click="easter(2)">i</span>
+					<span @click="easter(3)">n</span>
+					<span @click="easter(4)">g</span>
+					<span @click="easter(5)">o</span>
+				</h1></div>
 				
 				<div class="content">
 					<div class="statContainer" style="margin-bottom: 2rem">Started At: <span class="stat">{{formatDate(card.started)}}</span></div>
@@ -69,7 +75,9 @@ export default {
 			fullCard: false
 		},
 
-
+		appStyle: {
+			backgroundImage: null
+		},
 		cardChoices: [
 			// V2
 			"Choco posts 2 rocket league clips in a day",
@@ -129,6 +137,9 @@ export default {
 	methods: {
 		formatDate(date) {
 			return date.toLocaleString();
+		},
+		easter(num) {
+			this.appStyle.backgroundImage = "url('./img/"+num+".png')";
 		},
 
 		generateCard() {
@@ -233,6 +244,7 @@ export default {
 		Logger.log("Events", `Registering...`, "success");
 		this.$root.$on("completeAction", this.completeAction);
 		this.$root.$on("saveCard", this.saveCard);
+		this.$root.$on("esa", this.easter);
 		Logger.log("Events", `Registered`, "success");
 
 		const card = localStorage.getItem('dye-bingoCard');

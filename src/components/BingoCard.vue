@@ -1,11 +1,11 @@
 <template>
 	<div class="bingo-card">
 		<div class="titleSpan">
-			<div>D</div>
+			<div @click="$root.$emit('esa', 6)">D</div>
 			<div>E</div>
-			<div>L</div>
+			<div @click="$root.$emit('esa', 7)">L</div>
 			<div>A</div>
-			<div>Y</div>
+			<div @click="$root.$emit('esa', 8)">Y</div>
 		</div>
 		<div class="row" v-for="(row, index) of chunk(card.card, 5)" :key="index">
 			<div class="item" v-for="(item, itemIndex) of row" :key="itemIndex" @click="completeAction(item)" :class="{completed: item.completed != false}">
@@ -85,11 +85,11 @@ export default {
 		transition: .15s ease-in-out;
 		cursor: pointer;
 		&:hover {
-			background-color: #444444;
+			background-color: rgba(255,255,255, 0.08)
 		}
 
 		&.completed {
-			background-color: #1d1d1d;
+			background-color: rgba(0,0,0,0.3);
 			color: #909090;
 			cursor: not-allowed;
 		}

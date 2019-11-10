@@ -27,6 +27,10 @@
 
 					<br><br>
 					<div><button @click="resetCard">Reset</button></div>
+
+					<textarea v-if="winstate.fullCard" disabled :value="generateJson"></textarea>
+
+
 				</div>
 			</div>
 
@@ -63,6 +67,11 @@ export default {
 	name: 'app',
 	components: {
 		BingoCard
+	},
+	computed: {
+		generateJson() {
+			return JSON.stringify(this.card);
+		}
 	},
 	data() {return {
 		ready: false,
@@ -119,19 +128,28 @@ export default {
 			"Droei posts lasagna",
 			"A delay meme is posted",
 			"Michael false mutes",
-			"Someone mistakes helper for builder",
+			"Someone mistakes helper for builder", // Good luck if you get this
 			"Someone left because their app got denied",
 			"Someone discusses #programming in #general",
 			"Someone mentions hytale",
 			"Droei brags about his PC",
 
-			// Other
+			// Other - LegendEffects
 			"Droei wants to buy more tech",
 			"Michael attempts to stop Droei from buying more tech",
 			"MiniDigger gets drunk",
 			"Dennis uses ShareX",
 			"Dennis takes a picture of his monitor instead of screenshotting",
-			"Dennis spams :dutch_omega_lul: in one message"
+			"Dennis spams :dutch_omega_lul: in one message",
+			"Jay calls someones meme bad in #memes",
+
+			// Perotin
+			"Michael forgets he's a moderator",
+			"KingAlter overly share a project",
+			"A debate about America starts",
+
+			// Stefan
+			"People start talking Dutch",
 		]
 	}},
 	methods: {
@@ -169,7 +187,8 @@ export default {
 					id,
 					index: temp.length,
 					phrase: item,
-					completed: false
+					completed: false,
+					proof: null
 				});
 
 				generated++;
@@ -187,6 +206,11 @@ export default {
 		},
 		resetCard() {
 			this.card = null;
+			this.winstate = {
+				rows: [],
+				cols: [],
+				fullCard: false
+			};
 			localStorage.removeItem("dye-bingoCard");
 		},
 		completeAction(card) {

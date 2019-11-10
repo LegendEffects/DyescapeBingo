@@ -109,7 +109,6 @@ export default {
 			"Cooking show happens in #food",
 			"KingAlter laughs at something that isn't funny",
 			"Jay yells at Dennis for absolutely anything",
-			"Zirker posts more than 10 messages in a day",
 			"Stefan posts 3 coubs in a day",
 			"Dennis ignores the advice that Michael gives him in #tech and goes to his own conclusion",
 			"Zirker rants about maths",
@@ -134,7 +133,8 @@ export default {
 			"Someone mentions hytale",
 			"Droei brags about his PC",
 
-			// Other - LegendEffects
+			// LegendEffects
+			"Dennis makes fun of Verstappen",
 			"Droei wants to buy more tech",
 			"Michael attempts to stop Droei from buying more tech",
 			"MiniDigger gets drunk",
@@ -142,14 +142,33 @@ export default {
 			"Dennis takes a picture of his monitor instead of screenshotting",
 			"Dennis spams :dutch_omega_lul: in one message",
 			"Jay calls someones meme bad in #memes",
-
+			"Dennis complains about infrastructure",
+			"Pjinky sends a message",
+			"Dennis shows his Tekken rank",
+			
 			// Perotin
 			"Michael forgets he's a moderator",
-			"KingAlter overly share a project",
+			"KingAlter overly shares a project",
 			"A debate about America starts",
 
 			// Stefan
 			"People start talking Dutch",
+
+			// Zirker
+			"Mister Erwin makes a pun",
+			"Someone donates",
+			"Dennis asks someone to donate",
+			"Dennis doesn't make a devlog for a week",
+			"Wynncraft gets shit on",
+			"New guy talks shit about Dyescape and people mob them until they leave",
+			"Michael posts pictures of pets outside of pets",
+			"Phil says hi",
+			"Dennis streams a game",
+
+			// KingAlter
+			"Dennis complains about his Indian peers at work",
+			"Dennis starts talking about taking a shit",
+			"Choco posts pictures of Creed"
 		]
 	}},
 	methods: {

@@ -112,7 +112,7 @@ export default {
 			"Raiding a spigot thread",
 			"Someone shits on others code",
 			"The #lore channel is used",
-			"Some guy posts a gringery gif",
+			"Some guy posts a cringy gif",
 			"Aekalix makes a fancy devlog",
 			"Euvrounin false mutes",
 			"A dutch person shits on Belgium for no reason",
